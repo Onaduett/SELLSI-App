@@ -9,19 +9,26 @@ import SwiftUI
 
 struct ProductListView: View {
     let products: [Product]
-    var columns = [GridItem(.adaptive(minimum: 180), spacing: 20)]
-    @EnvironmentObject var languageManager: LanguageManager // Added for localization
+    @EnvironmentObject var languageManager: LanguageManager
+    
+    private var columns: [GridItem] {
+        [
+            GridItem(.fixed(170), spacing: 10),
+            GridItem(.fixed(170), spacing: 10)
+        ]
+    }
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: columns, spacing: 20) {
+            LazyVGrid(columns: columns, spacing: 12) {
                 ForEach(products) { product in
                     ProductCardView(product: product)
-                        .environmentObject(languageManager) // Pass languageManager to ProductCardView
+                        .environmentObject(languageManager)
                 }
             }
-            .padding()
+            .padding(.horizontal, 16)
+            .padding(.vertical, 16)
         }
+        .scrollIndicators(.hidden)
     }
 }
-

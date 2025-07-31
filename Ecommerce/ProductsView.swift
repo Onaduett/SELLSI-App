@@ -15,12 +15,8 @@ struct ProductsView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.blue.opacity(0.1), Color.purple.opacity(0.1)]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-                .ignoresSafeArea()
+                Color(.systemGroupedBackground)
+                    .ignoresSafeArea()
                 
                 VStack {
                     if productService.isLoading {
@@ -50,12 +46,15 @@ struct ProductsView: View {
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("refresh".localized(languageManager)) { 
+                    Button(action: {
                         Task {
                             await productService.fetchProducts()
                         }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 16, weight: .medium))
+                            .foregroundColor(.primary)
                     }
-                    .foregroundColor(.primary)
                 }
             }
         }

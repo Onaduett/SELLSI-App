@@ -7,111 +7,109 @@
 
 import SwiftUI
 
-
 struct ProductCardView: View {
     let product: Product
     @EnvironmentObject var cartManager: CartManager
-    @EnvironmentObject var languageManager: LanguageManager // Added for localization
+    @EnvironmentObject var languageManager: LanguageManager
     @State private var showingBuyAlert = false
     
     var body: some View {
-        ZStack(alignment: .topTrailing) {
-            ZStack(alignment: .bottom) {
+        VStack(alignment: .leading, spacing: 0) {
+            ZStack(alignment: .topTrailing) {
                 AsyncImage(url: URL(string: product.imageUrl ?? "")) { image in
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                 } placeholder: {
-                    RoundedRectangle(cornerRadius: 20)
-                        .fill(Color.gray.opacity(0.2))
+                    Rectangle()
+                        .fill(Color(.systemGray6))
                         .overlay(
-                            VStack {
+                            VStack(spacing: 8) {
                                 Image(systemName: "photo")
-                                    .font(.title)
-                                    .foregroundColor(.gray)
-                                Text("loading".localized(languageManager)) // Localized
+                                    .font(.title2)
+                                    .foregroundColor(.secondary)
+                                Text("loading".localized(languageManager))
                                     .font(.caption)
-                                    .foregroundColor(.gray)
+                                    .foregroundColor(.secondary)
                             }
                         )
                 }
-                .frame(width: 180, height: 200)
+                .frame(height: 140)
                 .clipped()
-                .cornerRadius(20)
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(product.name)
-                        .font(.headline)
-                        .bold()
-                        .foregroundColor(.primary)
-                        .lineLimit(1)
-                    
-                    HStack {
-                        Text(String(format: languageManager.localizedString("price_format"), product.price)) // Localized price format
-                            .font(.title3)
-                            .bold()
-                            .foregroundColor(.green)
-                        
-                        Spacer()
-                        
-                        if let type = product.type {
-                            Text(type.uppercased()) // Product type might need localization if it's a fixed set of categories
-                                .font(.caption2)
-                                .padding(.horizontal, 6)
-                                .padding(.vertical, 2)
-                                .background(Color.blue.opacity(0.2))
-                                .foregroundColor(.blue)
-                                .cornerRadius(4)
-                        }
-                    }
-                    
-                    if let description = product.description {
-                        Text(description)
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                            .lineLimit(2)
-                    }
-                    
-                    Text(product.createdAt.formattedDate(languageManager: languageManager)) // Localized date format
-                        .font(.caption2)
-                        .foregroundColor(.secondary)
+                Button(action: {
+                    cartManager.addToCart(product: product)
+                    showingBuyAlert = true
+                }) {
+                    Image(systemName: "plus")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(width: 24, height: 24)
+                        .background(Color.black)
+                        .clipShape(Circle())
                 }
-                .padding()
-                .frame(width: 180, alignment: .leading)
-                .background(.ultraThinMaterial)
-                .cornerRadius(20)
+                .padding(8)
             }
-            .frame(width: 180, height: 280)
-            .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
             
-            Button(action: {
-                cartManager.addToCart(product: product)
-                showingBuyAlert = true
-            }) {
-                Image(systemName: "cart.badge.plus")
-                    .font(.system(size: 16, weight: .bold))
-                    .padding(12)
-                    .foregroundColor(.white)
-                    .background(
-                        LinearGradient(
-                            gradient: Gradient(colors: [Color.blue, Color.purple]),
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .cornerRadius(25)
-                    .shadow(color: .blue.opacity(0.3), radius: 4, x: 0, y: 2)
+            // Content area
+            VStack(alignment: .leading, spacing: 8) {
+                // Product name
+                Text(product.name)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.leading)
+                
+                // Price and type
+                HStack {
+                    Text(String(format: languageManager.localizedString("price_format"), product.price))
+                        .font(.system(size: 18, weight: .bold))
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                    
+                    if let type = product.type {
+                        Text(type.uppercased())
+                            .font(.system(size: 10, weight: .medium))
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(Color(.systemGray6))
+                            .clipShape(Capsule())
+                    }
+                }
+                
+                // Description
+                if let description = product.description {
+                    Text(description)
+                        .font(.system(size: 13))
+                        .foregroundColor(.secondary)
+                        .lineLimit(2)
+                        .multilineTextAlignment(.leading)
+                }
+                
+                // Date
+                Text(product.createdAt.formattedDate(languageManager: languageManager))
+                    .font(.system(size: 11))
+                    .foregroundStyle(.tertiary)
             }
-            .padding()
-            .alert("product_added".localized(languageManager), isPresented: $showingBuyAlert) { // Localized
-                Button("ok".localized(languageManager), role: .cancel) { } // Localized
-            } message: {
-                Text(String(format: languageManager.localizedString("product_added_message"), product.name)) // Localized with format
-            }
+            .padding(12)
         }
-        .scaleEffect(showingBuyAlert ? 0.95 : 1.0)
-        .animation(.easeInOut(duration: 0.1), value: showingBuyAlert)
+        .frame(width: 170)
+        .background(Color(.systemBackground))
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12)
+                .stroke(Color(.systemGray5), lineWidth: 1)
+        )
+        .shadow(color: .black.opacity(0.04), radius: 8, x: 0, y: 2)
+        .alert("product_added".localized(languageManager), isPresented: $showingBuyAlert) {
+            Button("ok".localized(languageManager), role: .cancel) { }
+        } message: {
+            Text(String(format: languageManager.localizedString("product_added_message"), product.name))
+        }
+        .scaleEffect(showingBuyAlert ? 0.98 : 1.0)
+        .animation(.easeInOut(duration: 0.15), value: showingBuyAlert)
     }
 }
-
 
