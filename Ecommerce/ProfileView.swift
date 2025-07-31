@@ -2,17 +2,17 @@
 //  ProfileView.swift
 //  Ecommerce
 //
-//  Created by Daulet Yerkinov on 31.07.25.
+//  Created by v0 on 31.07.25.
 //
 
 import SwiftUI
 
-
 struct ProfileView: View {
     @EnvironmentObject var languageManager: LanguageManager
+    @EnvironmentObject var themeManager: ThemeManager
+    @Environment(\.colorScheme) var colorScheme
     @State private var userProfile: UserProfile
     @State private var showingEditProfile = false
-    @State private var isDarkMode = false
     @State private var notificationsEnabled = true
     @State private var showingAppSettingsSheet = false
     @State private var showingOrderHistory = false
@@ -32,7 +32,7 @@ struct ProfileView: View {
         NavigationView {
             ZStack {
                 LinearGradient(
-                    gradient: Gradient(colors: [Color.purple.opacity(0.1), Color.pink.opacity(0.1)]),
+                    gradient: Gradient(colors: AppTheme.gradientColors(for: colorScheme)),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing
                 )
@@ -40,6 +40,7 @@ struct ProfileView: View {
                 
                 ScrollView {
                     VStack(spacing: 25) {
+                        // Profile Header
                         VStack(spacing: 15) {
                             Image(systemName: "person.circle.fill")
                                 .font(.system(size: 80))
@@ -48,19 +49,22 @@ struct ProfileView: View {
                             Text(userProfile.name)
                                 .font(.title2)
                                 .bold()
+                                .foregroundColor(AppTheme.primaryColor(for: colorScheme))
                             
                             Text(userProfile.email)
                                 .font(.subheadline)
-                                .foregroundColor(.secondary)
+                                .foregroundColor(AppTheme.secondaryColor(for: colorScheme))
                         }
                         .padding()
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
+                        // Profile Info Section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("profile_info_section_title".localized(languageManager))
                                 .font(.headline)
                                 .padding(.leading)
+                                .foregroundColor(AppTheme.primaryColor(for: colorScheme))
                             
                             ProfileInfoRow(title: "phone_field_placeholder".localized(languageManager), value: userProfile.phone, icon: "phone.fill")
                             ProfileInfoRow(title: "address_field_placeholder".localized(languageManager), value: userProfile.address, icon: "location.fill")
@@ -79,21 +83,52 @@ struct ProfileView: View {
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
+                        // Settings Section
                         VStack(alignment: .leading, spacing: 15) {
                             Text("settings_title".localized(languageManager))
                                 .font(.headline)
                                 .padding(.leading)
+                                .foregroundColor(AppTheme.primaryColor(for: colorScheme))
+                            
+                            // Theme Switcher Row
+                            HStack {
+                                HStack(spacing: 12) {
+                                    Image(systemName: themeManager.isDarkMode ? "moon.fill" : "sun.max.fill")
+                                        .font(.system(size: 16))
+                                        .foregroundColor(themeManager.isDarkMode ? .purple : .orange)
+                                        .frame(width: 24)
+                                    
+                                    Text("dark_mode_setting_title".localized(languageManager))
+                                        .font(.system(size: 16))
+                                        .foregroundColor(AppTheme.primaryColor(for: colorScheme))
+                                }
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    themeManager.toggleTheme()
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 16)
+                                            .fill(themeManager.isDarkMode ? Color.purple : Color.gray.opacity(0.3))
+                                            .frame(width: 50, height: 30)
+                                        
+                                        Circle()
+                                            .fill(Color.white)
+                                            .frame(width: 26, height: 26)
+                                            .offset(x: themeManager.isDarkMode ? 10 : -10)
+                                            .animation(.spring(response: 0.3, dampingFraction: 0.7), value: themeManager.isDarkMode)
+                                    }
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                            .padding(.horizontal)
+                            .padding(.vertical, 8)
                             
                             SettingsRow(
                                 title: "notifications_setting_title".localized(languageManager),
                                 icon: "bell.fill",
                                 toggle: $notificationsEnabled
-                            )
-                            
-                            SettingsRow(
-                                title: "dark_mode_setting_title".localized(languageManager),
-                                icon: "moon.fill",
-                                toggle: $isDarkMode
                             )
                             
                             Divider()
@@ -139,7 +174,9 @@ struct ProfileView: View {
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
+                        // Logout Button
                         Button("logout_button_title".localized(languageManager)) {
+                            // Handle logout
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -177,7 +214,6 @@ struct ProfileView: View {
     }
 }
 
-// MARK: - Placeholder Views for the sheets
 struct OrderHistoryView: View {
     @EnvironmentObject var languageManager: LanguageManager
     @Environment(\.dismiss) private var dismiss
