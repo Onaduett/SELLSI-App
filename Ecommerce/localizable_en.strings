@@ -1,0 +1,58 @@
+/* 
+   Localizable.strings (English)
+   Ecommerce
+   
+   Created by Daulet Yerkinov on 31.07.25.
+*/
+
+// MARK: - Navigation & General
+"shop_title" = "🛍️ Shop";
+"refresh" = "Refresh";
+"loading" = "Loading...";
+"error" = "Error";
+"try_again" = "Try Again";
+"ok" = "OK";
+"done" = "Done";
+"cancel" = "Cancel";
+
+// MARK: - Product
+"buy" = "Buy";
+"add_to_cart" = "Add to Cart";
+"product_added" = "Product Added";
+"product_added_message" = "Product \"%@\" added to cart!";
+"price_format" = "$%.2f";
+
+// MARK: - Loading States
+"loading_products" = "Loading products...";
+"no_products" = "No Products";
+"no_products_message" = "No products available yet.\nTry refreshing the list.";
+"empty_cart" = "Cart is Empty";
+
+// MARK: - Errors
+"network_error" = "Network Error";
+"invalid_url" = "Invalid URL";
+"loading_error" = "Loading error: %@";
+"server_error" = "Server Error";
+
+// MARK: - Settings
+"settings_title" = "Settings";
+"language_title" = "App Language";
+"app_version" = "App Version";
+
+// MARK: - Languages
+"russian" = "Русский";
+"english" = "English";
+
+// MARK: - Date Formatting
+"date_format" = "MM/dd/yyyy";
+
+// MARK: - Product Categories
+"electronics" = "Electronics";
+"clothing" = "Clothing";
+"books" = "Books";
+"home" = "Home";
+"sports" = "Sports";
+"beauty" = "Beauty";
+"toys" = "Toys";
+"food" = "Food";
+"other" = "Other";
