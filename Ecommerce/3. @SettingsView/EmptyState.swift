@@ -10,7 +10,7 @@ import SwiftUI
 
 struct EmptyStateView: View {
   let onRefresh: () -> Void
-  @EnvironmentObject var languageManager: LanguageManager // Added for localization
+  @EnvironmentObject var languageManager: LanguageManager
   
   var body: some View {
       VStack(spacing: 20) {
@@ -18,17 +18,17 @@ struct EmptyStateView: View {
               .font(.system(size: 50))
               .foregroundColor(.gray.opacity(0.7))
           
-          Text("no_products".localized(languageManager)) // Localized
+          Text("no_products".localized(languageManager))
               .font(.title)
               .bold()
               .foregroundColor(.primary)
           
-          Text("no_products_message".localized(languageManager)) // Localized
+          Text("no_products_message".localized(languageManager))
               .font(.body)
               .foregroundColor(.secondary)
               .multilineTextAlignment(.center)
           
-          Button("refresh".localized(languageManager)) { // Localized
+          Button("refresh".localized(languageManager)) { 
               onRefresh()
           }
           .padding(.horizontal, 24)

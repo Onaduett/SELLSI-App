@@ -9,15 +9,15 @@ import SwiftUI
 
 
 struct ProfileView: View {
-    @EnvironmentObject var languageManager: LanguageManager // Added for localization
+    @EnvironmentObject var languageManager: LanguageManager
     @State private var userProfile: UserProfile
     @State private var showingEditProfile = false
     @State private var isDarkMode = false
     @State private var notificationsEnabled = true
-    @State private var showingAppSettingsSheet = false // New state for SettingsView sheet
-    @State private var showingOrderHistory = false // Add state for order history
-    @State private var showingSupport = false // Add state for support
-    @State private var showingAbout = false // Add state for about
+    @State private var showingAppSettingsSheet = false
+    @State private var showingOrderHistory = false
+    @State private var showingSupport = false
+    @State private var showingAbout = false
     
     init() {
         _userProfile = State(initialValue: UserProfile(
@@ -58,14 +58,14 @@ struct ProfileView: View {
                         .cornerRadius(20)
                         
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("profile_info_section_title".localized(languageManager)) // Localized
+                            Text("profile_info_section_title".localized(languageManager))
                                 .font(.headline)
                                 .padding(.leading)
                             
-                            ProfileInfoRow(title: "phone_field_placeholder".localized(languageManager), value: userProfile.phone, icon: "phone.fill") // Localized
-                            ProfileInfoRow(title: "address_field_placeholder".localized(languageManager), value: userProfile.address, icon: "location.fill") // Localized
+                            ProfileInfoRow(title: "phone_field_placeholder".localized(languageManager), value: userProfile.phone, icon: "phone.fill")
+                            ProfileInfoRow(title: "address_field_placeholder".localized(languageManager), value: userProfile.address, icon: "location.fill")
                             
-                            Button("edit_profile_title".localized(languageManager)) { // Localized
+                            Button("edit_profile_title".localized(languageManager)) {
                                 showingEditProfile = true
                             }
                             .frame(maxWidth: .infinity)
@@ -80,27 +80,26 @@ struct ProfileView: View {
                         .cornerRadius(20)
                         
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("settings_title".localized(languageManager)) // Localized
+                            Text("settings_title".localized(languageManager))
                                 .font(.headline)
                                 .padding(.leading)
                             
                             SettingsRow(
-                                title: "notifications_setting_title".localized(languageManager), // Localized
+                                title: "notifications_setting_title".localized(languageManager),
                                 icon: "bell.fill",
                                 toggle: $notificationsEnabled
                             )
                             
                             SettingsRow(
-                                title: "dark_mode_setting_title".localized(languageManager), // Localized
+                                title: "dark_mode_setting_title".localized(languageManager),
                                 icon: "moon.fill",
                                 toggle: $isDarkMode
                             )
                             
                             Divider()
                             
-                            // Language Settings Action Row
                             SettingsActionRow(
-                                title: "language_settings_action_title".localized(languageManager),
+                                title: "language_title".localized(languageManager),
                                 icon: "globe"
                             ) {
                                 showingAppSettingsSheet = true
@@ -108,7 +107,6 @@ struct ProfileView: View {
                             
                             Divider()
                             
-                            // Fixed: Added action parameters to all SettingsActionRow calls
                             SettingsActionRow(
                                 title: "order_history_action_title".localized(languageManager),
                                 icon: "clock.fill"
@@ -130,7 +128,6 @@ struct ProfileView: View {
                                 showingAbout = true
                             }
                             
-                            // Action to open App Settings
                             SettingsActionRow(
                                 title: "app_settings_action_title".localized(languageManager),
                                 icon: "gearshape.fill"
@@ -142,9 +139,7 @@ struct ProfileView: View {
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
-                        // Logout Button
-                        Button("logout_button_title".localized(languageManager)) { // Localized
-                            // Logout logic here
+                        Button("logout_button_title".localized(languageManager)) {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
@@ -156,26 +151,26 @@ struct ProfileView: View {
                     .padding()
                 }
             }
-            .navigationTitle("profile_tab_title".localized(languageManager)) // Localized
+            .navigationTitle("profile_tab_title".localized(languageManager))
             .navigationBarTitleDisplayMode(.large)
         }
         .sheet(isPresented: $showingEditProfile) {
             EditProfileView(userProfile: $userProfile)
-                .environmentObject(languageManager) // Pass languageManager to EditProfileView
+                .environmentObject(languageManager)
         }
-        .sheet(isPresented: $showingAppSettingsSheet) { // Sheet for SettingsView
+        .sheet(isPresented: $showingAppSettingsSheet) {
             SettingsView()
-                .environmentObject(languageManager) // Pass languageManager to SettingsView
+                .environmentObject(languageManager)
         }
-        .sheet(isPresented: $showingOrderHistory) { // Sheet for Order History
+        .sheet(isPresented: $showingOrderHistory) {
             OrderHistoryView()
                 .environmentObject(languageManager)
         }
-        .sheet(isPresented: $showingSupport) { // Sheet for Support
+        .sheet(isPresented: $showingSupport) {
             SupportView()
                 .environmentObject(languageManager)
         }
-        .sheet(isPresented: $showingAbout) { // Sheet for About
+        .sheet(isPresented: $showingAbout) {
             AboutView()
                 .environmentObject(languageManager)
         }

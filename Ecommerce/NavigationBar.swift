@@ -9,14 +9,13 @@ import SwiftUI
 
 
 struct NavigationBar: View {
-  @EnvironmentObject var languageManager: LanguageManager // Added for localization
+  @EnvironmentObject var languageManager: LanguageManager
   @StateObject private var cartManager: CartManager
   @StateObject private var productService: ProductService
   
-  init() { // Removed languageManager from init parameters
-      // Initialize StateObjects, passing the languageManager that will be injected by the environment
-      _cartManager = StateObject(wrappedValue: CartManager(languageManager: LanguageManager())) // Use a default LanguageManager for init, it will be replaced by environment
-      _productService = StateObject(wrappedValue: ProductService(languageManager: LanguageManager())) // Use a default LanguageManager for init, it will be replaced by environment
+  init() {
+      _cartManager = StateObject(wrappedValue: CartManager(languageManager: LanguageManager()))
+      _productService = StateObject(wrappedValue: ProductService(languageManager: LanguageManager()))
   }
 
   var body: some View {
@@ -24,11 +23,11 @@ struct NavigationBar: View {
           ProductsView()
               .tabItem {
                   Image(systemName: "house.fill")
-                  Text("main_tab_title".localized(languageManager)) // Localized
+                  Text("main_tab_title".localized(languageManager))
               }
               .environmentObject(cartManager)
               .environmentObject(productService)
-              .environmentObject(languageManager) // Pass languageManager down
+              .environmentObject(languageManager)
           
           CartView()
               .tabItem {
@@ -44,22 +43,20 @@ struct NavigationBar: View {
                               .offset(x: 8, y: -8)
                       }
                   }
-                  Text("cart_tab_title".localized(languageManager)) // Localized
+                  Text("cart_tab_title".localized(languageManager))
               }
               .environmentObject(cartManager)
-              .environmentObject(languageManager) // Pass languageManager down
+              .environmentObject(languageManager)
           
           ProfileView()
               .tabItem {
                   Image(systemName: "person.fill")
-                  Text("profile_tab_title".localized(languageManager)) // Localized
+                  Text("profile_tab_title".localized(languageManager))
               }
-              .environmentObject(languageManager) // Pass languageManager down
+              .environmentObject(languageManager)
       }
       .accentColor(.blue)
       .onAppear {
-          // After languageManager is injected, update the managers if needed
-          // This is a common pattern when StateObjects depend on EnvironmentObjects
           cartManager.languageManager = languageManager
           productService.languageManager = languageManager
       }
@@ -68,8 +65,8 @@ struct NavigationBar: View {
 
 struct ContentView_Previews: PreviewProvider {
   static var previews: some View {
-      NavigationBar() // No need to pass languageManager here directly
-          .environmentObject(LanguageManager()) // Provide LanguageManager for the environment
+      NavigationBar()
+          .environmentObject(LanguageManager())
   }
 }
 

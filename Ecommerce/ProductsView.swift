@@ -10,7 +10,7 @@ import SwiftUI
 struct ProductsView: View {
     @EnvironmentObject var productService: ProductService
     @EnvironmentObject var cartManager: CartManager
-    @EnvironmentObject var languageManager: LanguageManager // Added for localization
+    @EnvironmentObject var languageManager: LanguageManager
     
     var body: some View {
         NavigationView {
@@ -25,32 +25,32 @@ struct ProductsView: View {
                 VStack {
                     if productService.isLoading {
                         LoadingView()
-                            .environmentObject(languageManager) // Pass languageManager
+                            .environmentObject(languageManager)
                     } else if let errorMessage = productService.errorMessage {
                         ErrorView(message: errorMessage) {
                             Task {
                                 await productService.fetchProducts()
                             }
                         }
-                        .environmentObject(languageManager) // Pass languageManager
+                        .environmentObject(languageManager)
                     } else if productService.products.isEmpty {
                         EmptyStateView {
                             Task {
                                 await productService.fetchProducts()
                             }
                         }
-                        .environmentObject(languageManager) // Pass languageManager to EmptyStateView
+                        .environmentObject(languageManager)
                     } else {
                         ProductListView(products: productService.products)
-                            .environmentObject(languageManager) // Pass languageManager to ProductListView
+                            .environmentObject(languageManager)
                     }
                 }
             }
-            .navigationTitle("shop_title".localized(languageManager)) // Localized
+            .navigationTitle("shop_title".localized(languageManager))
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("refresh".localized(languageManager)) { // Localized
+                    Button("refresh".localized(languageManager)) { 
                         Task {
                             await productService.fetchProducts()
                         }
