@@ -88,5 +88,6 @@
 "default_user_phone" = "+7 (XXX) XXX-XX-XX";
 "default_user_address" = "Не указан";
 "app_settings_action_title" = "Настройки приложения";
+"add_products_from_catalogue" = "Добавьте товары из каталога";
 
 

@@ -8,19 +8,21 @@
 import SwiftUI
 
 
+
 struct EmptyCartView: View {
+    @EnvironmentObject var languageManager: LanguageManager
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "cart")
                 .font(.system(size: 60))
                 .foregroundColor(.gray.opacity(0.7))
             
-            Text("Корзина пуста")
+            Text("empty_cart".localized(languageManager))
                 .font(.title)
                 .bold()
                 .foregroundColor(.primary)
             
-            Text("Добавьте товары из каталога")
+            Text("add_products_from_catalogue".localized(languageManager))
                 .font(.body)
                 .foregroundColor(.secondary)
         }

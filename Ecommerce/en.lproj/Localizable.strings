@@ -88,5 +88,7 @@
 "default_user_phone" = "+1 (XXX) XXX-XX-XX";
 "default_user_address" = "Not specified";
 "app_settings_action_title" = "App Settings";
+"add_products_from_catalogue" = "Add Products from the list";
+
 
 
