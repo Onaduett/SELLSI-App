@@ -9,6 +9,7 @@ import SwiftUI
 
 struct CartView: View {
     @EnvironmentObject var cartManager: CartManager
+    @EnvironmentObject var languageManager: LanguageManager // Added for localization
     @State private var showingCheckoutAlert = false
     
     var body: some View {
@@ -23,26 +24,29 @@ struct CartView: View {
                 
                 if cartManager.items.isEmpty {
                     EmptyCartView()
+                        .environmentObject(languageManager) // Pass languageManager to EmptyCartView
                 } else {
                     VStack {
                         List {
                             ForEach(cartManager.items) { item in
                                 CartItemView(item: item)
+                                    .environmentObject(languageManager) // Pass languageManager to CartItemView
                             }
                             .onDelete(perform: deleteItems)
                         }
                         .listStyle(PlainListStyle())
                         
                         CartSummaryView()
+                            .environmentObject(languageManager) // Pass languageManager to CartSummaryView
                     }
                 }
             }
-            .navigationTitle("🛒 Корзина")
+            .navigationTitle("cart_tab_title".localized(languageManager)) // Localized
             .navigationBarTitleDisplayMode(.large)
             .toolbar {
                 if !cartManager.items.isEmpty {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button("Очистить") {
+                        Button("clear_cart".localized(languageManager)) { // Localized
                             cartManager.clearCart()
                         }
                         .foregroundColor(.red)
@@ -58,4 +62,6 @@ struct CartView: View {
         }
     }
 }
+
+
 

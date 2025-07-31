@@ -22,21 +22,6 @@ struct Product: Codable, Identifiable {
         case imageUrl = "image_url"
         case createdAt = "created_at"
     }
-    
-    var formattedPrice: String {
-        return String(format: "₽%.0f", price)
-    }
-    
-    var formattedDate: String {
-        let formatter = ISO8601DateFormatter()
-        if let date = formatter.date(from: createdAt) {
-            let displayFormatter = DateFormatter()
-            displayFormatter.dateStyle = .medium
-            displayFormatter.locale = Locale(identifier: "ru_RU")
-            return displayFormatter.string(from: date)
-        }
-        return createdAt
-    }
 }
 
 struct CartItem: Identifiable {
@@ -50,15 +35,28 @@ struct CartItem: Identifiable {
 }
 
 struct UserProfile {
-    var name: String = "Пользователь"
-    var email: String = "user@example.com"
-    var phone: String = "+7 (XXX) XXX-XX-XX"
-    var address: String = "Не указан"
+    var name: String
+    var email: String
+    var phone: String
+    var address: String
+
+    // Initializer to allow setting localized defaults
+    init(name: String, email: String, phone: String, address: String) {
+        self.name = name
+        self.email = email
+        self.phone = phone
+        self.address = address
+    }
 }
 
 // MARK: - Cart Manager
 class CartManager: ObservableObject {
     @Published var items: [CartItem] = []
+    var languageManager: LanguageManager // Dependency injection
+
+    init(languageManager: LanguageManager) {
+        self.languageManager = languageManager
+    }
     
     var totalItems: Int {
         items.reduce(0) { $0 + $1.quantity }
@@ -69,7 +67,7 @@ class CartManager: ObservableObject {
     }
     
     var formattedTotalPrice: String {
-        return String(format: "₽%.0f", totalPrice)
+        return String(format: languageManager.localizedString("price_format"), totalPrice)
     }
     
     func addToCart(product: Product) {
@@ -106,6 +104,11 @@ class ProductService: ObservableObject {
     @Published var errorMessage: String?
     
     private let baseURL = "http://192.168.2.1:3000"
+    var languageManager: LanguageManager // Dependency injection
+
+    init(languageManager: LanguageManager) {
+        self.languageManager = languageManager
+    }
     
     func fetchProducts() async {
         await MainActor.run {
@@ -116,7 +119,7 @@ class ProductService: ObservableObject {
         guard let url = URL(string: "\(baseURL)/api/products") else {
             await MainActor.run {
                 isLoading = false
-                errorMessage = "Неверный URL"
+                errorMessage = languageManager.localizedString("invalid_url") // Localized
             }
             return
         }
@@ -143,48 +146,23 @@ class ProductService: ObservableObject {
         } catch {
             await MainActor.run {
                 self.isLoading = false
-                self.errorMessage = "Ошибка загрузки: \(error.localizedDescription)"
+                self.errorMessage = String(format: languageManager.localizedString("loading_error"), error.localizedDescription) // Localized
             }
         }
     }
 }
 
+// MARK: - String Extension for Date Formatting
+extension String {
+    func formattedDate(languageManager: LanguageManager) -> String {
+        let formatter = ISO8601DateFormatter()
+        if let date = formatter.date(from: self) {
+            let displayFormatter = DateFormatter()
+            displayFormatter.dateStyle = .medium
+            displayFormatter.locale = languageManager.currentLocale // Use localized locale
+            return displayFormatter.string(from: date)
+        }
+        return self
+    }
+}
 
-// MARK: - Products View (Main Page)
-
-
-// MARK: - Product List View
-
-
-// MARK: - Product Card View
-
-
-
-
-// MARK: - Cart Item View
-
-
-// MARK: - Cart Summary View
-
-
-// MARK: - Empty Cart View
-
-
-// MARK: - Profile View
-
-
-// MARK: - Profile Info Row
-
-
-// MARK: - Settings Row
-
-// MARK: - Settings Action Row
-
-
-// MARK: - Edit Profile View
-
-// MARK: - Loading View
-
-
-
-// MARK: - Preview

@@ -8,19 +8,18 @@
 import SwiftUI
 
 struct SettingsActionRow: View {
-    let title: String
+    let title: String // This title is expected to be a localized string key
     let icon: String
+    let action: () -> Void // Add action parameter
     
     var body: some View {
-        Button {
-            // Action logic here
-        } label: {
+        Button(action: action) { // Use the passed action
             HStack(spacing: 15) {
                 Image(systemName: icon)
                     .foregroundColor(.blue)
                     .frame(width: 20)
                 
-                Text(title)
+                Text(title) // This text will now display the localized string
                     .font(.body)
                     .foregroundColor(.primary)
                 

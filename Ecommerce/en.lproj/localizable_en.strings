@@ -1,0 +1,92 @@
+/*
+ Localizable.strings (English)
+ Ecommerce
+ 
+ Created by Daulet Yerkinov on 31.07.25.
+*/
+
+// MARK: - Navigation & General
+"shop_title" = "🛍️ Shop";
+"refresh" = "Refresh";
+"loading" = "Loading...";
+"error" = "Error";
+"try_again" = "Try Again";
+"ok" = "OK";
+"done" = "Done";
+"cancel" = "Cancel";
+
+// MARK: - Product
+"buy" = "Buy";
+"add_to_cart" = "Add to Cart";
+"product_added" = "Product Added";
+"product_added_message" = "Product \"%@\" added to cart!";
+"price_format" = "$%.2f";
+
+// MARK: - Loading States
+"loading_products" = "Loading products...";
+"no_products" = "No Products";
+"no_products_message" = "No products available yet.\nTry refreshing the list.";
+"empty_cart" = "Cart is Empty";
+
+// MARK: - Errors
+"network_error" = "Network Error";
+"invalid_url" = "Invalid URL";
+"loading_error" = "Loading error: %@";
+"server_error" = "Server Error";
+
+// MARK: - Settings
+"settings_title" = "Settings";
+"language_title" = "App Language";
+"app_version" = "App Version";
+
+// MARK: - Languages
+"russian" = "Русский";
+"english" = "English";
+"russian_subtitle" = "Russian";
+"english_subtitle" = "English";
+
+// MARK: - Date Formatting
+"date_format" = "MM/dd/yyyy";
+
+// MARK: - Product Categories
+"electronics" = "Electronics";
+"clothing" = "Clothing";
+"books" = "Books";
+"home" = "Home";
+"sports" = "Sports";
+"beauty" = "Beauty";
+"toys" = "Toys";
+"food" = "Food";
+"other" = "Other";
+
+// MARK: - Custom Keys for UI
+"main_tab_title" = "Home";
+"cart_tab_title" = "Cart";
+"profile_tab_title" = "Profile";
+"name_field_placeholder" = "Name";
+"email_field_placeholder" = "Email";
+"phone_field_placeholder" = "Phone";
+"address_field_placeholder" = "Address";
+"basic_info_section_title" = "Basic Information";
+"contacts_section_title" = "Contacts";
+"edit_profile_title" = "Edit Profile";
+"save" = "Save";
+"profile_info_section_title" = "Profile Information";
+"notifications_setting_title" = "Notifications";
+"dark_mode_setting_title" = "Dark Mode";
+"order_history_action_title" = "Order History";
+"support_action_title" = "Support";
+"about_app_action_title" = "About App";
+"logout_button_title" = "Logout";
+"clear_cart" = "Clear";
+"total_price_label" = "Total:";
+"checkout_button_title" = "Checkout";
+"order_placed_alert_title" = "Order Placed!";
+"order_placed_alert_message" = "Your order for %@ has been successfully placed!";
+"default_user_name" = "User";
+"default_user_email" = "user@example.com";
+"default_user_phone" = "+1 (XXX) XXX-XX-XX";
+"default_user_address" = "Not specified";
+"app_settings_action_title" = "App Settings";
+
+

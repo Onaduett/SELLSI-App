@@ -11,6 +11,7 @@ import SwiftUI
 struct ProductCardView: View {
     let product: Product
     @EnvironmentObject var cartManager: CartManager
+    @EnvironmentObject var languageManager: LanguageManager // Added for localization
     @State private var showingBuyAlert = false
     
     var body: some View {
@@ -28,7 +29,7 @@ struct ProductCardView: View {
                                 Image(systemName: "photo")
                                     .font(.title)
                                     .foregroundColor(.gray)
-                                Text("Загрузка...")
+                                Text("loading".localized(languageManager)) // Localized
                                     .font(.caption)
                                     .foregroundColor(.gray)
                             }
@@ -46,7 +47,7 @@ struct ProductCardView: View {
                         .lineLimit(1)
                     
                     HStack {
-                        Text(product.formattedPrice)
+                        Text(String(format: languageManager.localizedString("price_format"), product.price)) // Localized price format
                             .font(.title3)
                             .bold()
                             .foregroundColor(.green)
@@ -54,7 +55,7 @@ struct ProductCardView: View {
                         Spacer()
                         
                         if let type = product.type {
-                            Text(type.uppercased())
+                            Text(type.uppercased()) // Product type might need localization if it's a fixed set of categories
                                 .font(.caption2)
                                 .padding(.horizontal, 6)
                                 .padding(.vertical, 2)
@@ -71,7 +72,7 @@ struct ProductCardView: View {
                             .lineLimit(2)
                     }
                     
-                    Text(product.formattedDate)
+                    Text(product.createdAt.formattedDate(languageManager: languageManager)) // Localized date format
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
@@ -102,13 +103,15 @@ struct ProductCardView: View {
                     .shadow(color: .blue.opacity(0.3), radius: 4, x: 0, y: 2)
             }
             .padding()
-            .alert("Товар добавлен", isPresented: $showingBuyAlert) {
-                Button("OK", role: .cancel) { }
+            .alert("product_added".localized(languageManager), isPresented: $showingBuyAlert) { // Localized
+                Button("ok".localized(languageManager), role: .cancel) { } // Localized
             } message: {
-                Text("Товар \"\(product.name)\" добавлен в корзину!")
+                Text(String(format: languageManager.localizedString("product_added_message"), product.name)) // Localized with format
             }
         }
         .scaleEffect(showingBuyAlert ? 0.95 : 1.0)
         .animation(.easeInOut(duration: 0.1), value: showingBuyAlert)
     }
 }
+
+

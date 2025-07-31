@@ -10,6 +10,7 @@ import SwiftUI
 
 struct CartSummaryView: View {
     @EnvironmentObject var cartManager: CartManager
+    @EnvironmentObject var languageManager: LanguageManager // Added for localization
     @State private var showingCheckoutAlert = false
     
     var body: some View {
@@ -17,7 +18,7 @@ struct CartSummaryView: View {
             Divider()
             
             HStack {
-                Text("Итого:")
+                Text("total_price_label".localized(languageManager)) // Localized
                     .font(.title2)
                     .bold()
                 
@@ -30,7 +31,7 @@ struct CartSummaryView: View {
             }
             .padding(.horizontal)
             
-            Button("Оформить заказ") {
+            Button("checkout_button_title".localized(languageManager)) { // Localized
                 showingCheckoutAlert = true
             }
             .frame(maxWidth: .infinity)
@@ -45,15 +46,16 @@ struct CartSummaryView: View {
             .foregroundColor(.white)
             .cornerRadius(12)
             .padding(.horizontal)
-            .alert("Заказ оформлен!", isPresented: $showingCheckoutAlert) {
-                Button("OK") {
+            .alert("order_placed_alert_title".localized(languageManager), isPresented: $showingCheckoutAlert) { // Localized
+                Button("ok".localized(languageManager)) { // Localized
                     cartManager.clearCart()
                 }
             } message: {
-                Text("Ваш заказ на сумму \(cartManager.formattedTotalPrice) успешно оформлен!")
+                Text(String(format: languageManager.localizedString("order_placed_alert_message"), cartManager.formattedTotalPrice)) // Localized with format
             }
         }
         .padding(.bottom)
         .background(.ultraThinMaterial)
     }
 }
+

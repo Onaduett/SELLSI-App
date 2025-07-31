@@ -10,6 +10,7 @@ import SwiftUI
 struct CartItemView: View {
     let item: CartItem
     @EnvironmentObject var cartManager: CartManager
+    @EnvironmentObject var languageManager: LanguageManager // Added for localization
     
     var body: some View {
         HStack(spacing: 15) {
@@ -33,7 +34,7 @@ struct CartItemView: View {
                     .font(.headline)
                     .lineLimit(2)
                 
-                Text(item.product.formattedPrice)
+                Text(String(format: languageManager.localizedString("price_format"), item.product.price)) // Localized price format
                     .font(.subheadline)
                     .foregroundColor(.green)
                     .bold()
@@ -62,7 +63,7 @@ struct CartItemView: View {
             Spacer()
             
             VStack {
-                Text(String(format: "₽%.0f", item.totalPrice))
+                Text(String(format: languageManager.localizedString("price_format"), item.totalPrice)) // Localized price format
                     .font(.headline)
                     .bold()
                     .foregroundColor(.primary)
@@ -73,3 +74,5 @@ struct CartItemView: View {
         .cornerRadius(12)
     }
 }
+
+

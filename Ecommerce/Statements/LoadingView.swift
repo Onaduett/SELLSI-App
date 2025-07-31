@@ -10,6 +10,7 @@ import SwiftUI
 
 struct LoadingView: View {
     @State private var isAnimating = false
+    @EnvironmentObject var languageManager: LanguageManager // Added for localization
     
     var body: some View {
         VStack(spacing: 20) {
@@ -33,7 +34,7 @@ struct LoadingView: View {
                     .animation(.linear(duration: 1).repeatForever(autoreverses: false), value: isAnimating)
             }
             
-            Text("Загружаем товары...")
+            Text("loading_products".localized(languageManager)) // Localized
                 .font(.headline)
                 .foregroundColor(.primary)
         }
@@ -42,3 +43,5 @@ struct LoadingView: View {
         }
     }
 }
+
+

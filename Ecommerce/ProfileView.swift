@@ -9,10 +9,24 @@ import SwiftUI
 
 
 struct ProfileView: View {
-    @State private var userProfile = UserProfile()
+    @EnvironmentObject var languageManager: LanguageManager // Added for localization
+    @State private var userProfile: UserProfile
     @State private var showingEditProfile = false
     @State private var isDarkMode = false
     @State private var notificationsEnabled = true
+    @State private var showingAppSettingsSheet = false // New state for SettingsView sheet
+    @State private var showingOrderHistory = false // Add state for order history
+    @State private var showingSupport = false // Add state for support
+    @State private var showingAbout = false // Add state for about
+    
+    init() {
+        _userProfile = State(initialValue: UserProfile(
+            name: "default_user_name".localized(LanguageManager()),
+            email: "default_user_email".localized(LanguageManager()),
+            phone: "default_user_phone".localized(LanguageManager()),
+            address: "default_user_address".localized(LanguageManager())
+        ))
+    }
     
     var body: some View {
         NavigationView {
@@ -26,7 +40,6 @@ struct ProfileView: View {
                 
                 ScrollView {
                     VStack(spacing: 25) {
-                        // Profile Header
                         VStack(spacing: 15) {
                             Image(systemName: "person.circle.fill")
                                 .font(.system(size: 80))
@@ -44,16 +57,15 @@ struct ProfileView: View {
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
-                        // Profile Information
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("Информация профиля")
+                            Text("profile_info_section_title".localized(languageManager)) // Localized
                                 .font(.headline)
                                 .padding(.leading)
                             
-                            ProfileInfoRow(title: "Телефон", value: userProfile.phone, icon: "phone.fill")
-                            ProfileInfoRow(title: "Адрес", value: userProfile.address, icon: "location.fill")
+                            ProfileInfoRow(title: "phone_field_placeholder".localized(languageManager), value: userProfile.phone, icon: "phone.fill") // Localized
+                            ProfileInfoRow(title: "address_field_placeholder".localized(languageManager), value: userProfile.address, icon: "location.fill") // Localized
                             
-                            Button("Редактировать профиль") {
+                            Button("edit_profile_title".localized(languageManager)) { // Localized
                                 showingEditProfile = true
                             }
                             .frame(maxWidth: .infinity)
@@ -67,36 +79,71 @@ struct ProfileView: View {
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
-                        // Settings Section
                         VStack(alignment: .leading, spacing: 15) {
-                            Text("Настройки")
+                            Text("settings_title".localized(languageManager)) // Localized
                                 .font(.headline)
                                 .padding(.leading)
                             
                             SettingsRow(
-                                title: "Уведомления",
+                                title: "notifications_setting_title".localized(languageManager), // Localized
                                 icon: "bell.fill",
                                 toggle: $notificationsEnabled
                             )
                             
                             SettingsRow(
-                                title: "Темная тема",
+                                title: "dark_mode_setting_title".localized(languageManager), // Localized
                                 icon: "moon.fill",
                                 toggle: $isDarkMode
                             )
                             
                             Divider()
                             
-                            SettingsActionRow(title: "История заказов", icon: "clock.fill")
-                            SettingsActionRow(title: "Служба поддержки", icon: "questionmark.circle.fill")
-                            SettingsActionRow(title: "О приложении", icon: "info.circle.fill")
+                            // Language Settings Action Row
+                            SettingsActionRow(
+                                title: "language_settings_action_title".localized(languageManager),
+                                icon: "globe"
+                            ) {
+                                showingAppSettingsSheet = true
+                            }
+                            
+                            Divider()
+                            
+                            // Fixed: Added action parameters to all SettingsActionRow calls
+                            SettingsActionRow(
+                                title: "order_history_action_title".localized(languageManager),
+                                icon: "clock.fill"
+                            ) {
+                                showingOrderHistory = true
+                            }
+                            
+                            SettingsActionRow(
+                                title: "support_action_title".localized(languageManager),
+                                icon: "questionmark.circle.fill"
+                            ) {
+                                showingSupport = true
+                            }
+                            
+                            SettingsActionRow(
+                                title: "about_app_action_title".localized(languageManager),
+                                icon: "info.circle.fill"
+                            ) {
+                                showingAbout = true
+                            }
+                            
+                            // Action to open App Settings
+                            SettingsActionRow(
+                                title: "app_settings_action_title".localized(languageManager),
+                                icon: "gearshape.fill"
+                            ) {
+                                showingAppSettingsSheet = true
+                            }
                         }
                         .padding(.vertical)
                         .background(.ultraThinMaterial)
                         .cornerRadius(20)
                         
                         // Logout Button
-                        Button("Выйти") {
+                        Button("logout_button_title".localized(languageManager)) { // Localized
                             // Logout logic here
                         }
                         .frame(maxWidth: .infinity)
@@ -109,11 +156,142 @@ struct ProfileView: View {
                     .padding()
                 }
             }
-            .navigationTitle("👤 Профиль")
+            .navigationTitle("profile_tab_title".localized(languageManager)) // Localized
             .navigationBarTitleDisplayMode(.large)
         }
         .sheet(isPresented: $showingEditProfile) {
             EditProfileView(userProfile: $userProfile)
+                .environmentObject(languageManager) // Pass languageManager to EditProfileView
+        }
+        .sheet(isPresented: $showingAppSettingsSheet) { // Sheet for SettingsView
+            SettingsView()
+                .environmentObject(languageManager) // Pass languageManager to SettingsView
+        }
+        .sheet(isPresented: $showingOrderHistory) { // Sheet for Order History
+            OrderHistoryView()
+                .environmentObject(languageManager)
+        }
+        .sheet(isPresented: $showingSupport) { // Sheet for Support
+            SupportView()
+                .environmentObject(languageManager)
+        }
+        .sheet(isPresented: $showingAbout) { // Sheet for About
+            AboutView()
+                .environmentObject(languageManager)
         }
     }
 }
+
+// MARK: - Placeholder Views for the sheets
+struct OrderHistoryView: View {
+    @EnvironmentObject var languageManager: LanguageManager
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("order_history_action_title".localized(languageManager))
+                    .font(.largeTitle)
+                    .padding()
+                
+                Spacer()
+                
+                Text("No orders yet")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
+            .navigationTitle("order_history_action_title".localized(languageManager))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("done".localized(languageManager)) {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct SupportView: View {
+    @EnvironmentObject var languageManager: LanguageManager
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("support_action_title".localized(languageManager))
+                    .font(.largeTitle)
+                    .padding()
+                
+                Spacer()
+                
+                Text("Contact us at support@example.com")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                
+                Spacer()
+            }
+            .navigationTitle("support_action_title".localized(languageManager))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("done".localized(languageManager)) {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct AboutView: View {
+    @EnvironmentObject var languageManager: LanguageManager
+    @Environment(\.dismiss) private var dismiss
+    
+    var body: some View {
+        NavigationView {
+            VStack {
+                Text("about_app_action_title".localized(languageManager))
+                    .font(.largeTitle)
+                    .padding()
+                
+                Spacer()
+                
+                VStack(spacing: 16) {
+                    Text("Your favorite ecommerce app")
+                        .font(.body)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal)
+                    
+                    Text("Version 1.0.0")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                Spacer()
+            }
+            .navigationTitle("about_app_action_title".localized(languageManager))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("done".localized(languageManager)) {
+                        dismiss()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct ProfileView_Previews: PreviewProvider {
+    static var previews: some View {
+        ProfileView()
+            .environmentObject(LanguageManager())
+    }
+}
+
+
+
