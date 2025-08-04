@@ -8,30 +8,15 @@
 import SwiftUI
 import Combine
 
-// MARK: - Theme Manager
 class ThemeManager: ObservableObject {
     @Published var isDarkMode: Bool {
         didSet {
             UserDefaults.standard.set(isDarkMode, forKey: "isDarkMode")
-            updateAppearance()
         }
     }
     
     init() {
-        // Load saved theme preference or default to system setting
         self.isDarkMode = UserDefaults.standard.object(forKey: "isDarkMode") as? Bool ?? false
-        updateAppearance()
-    }
-    
-    private func updateAppearance() {
-        DispatchQueue.main.async {
-            // Get all windows and update their appearance
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-                for window in windowScene.windows {
-                    window.overrideUserInterfaceStyle = self.isDarkMode ? .dark : .light
-                }
-            }
-        }
     }
     
     func toggleTheme() {
@@ -41,7 +26,6 @@ class ThemeManager: ObservableObject {
     }
 }
 
-// MARK: - Theme Colors
 struct AppTheme {
     static func backgroundColor(for colorScheme: ColorScheme) -> Color {
         colorScheme == .dark ? Color.black : Color.white

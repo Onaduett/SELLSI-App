@@ -40,7 +40,6 @@ struct UserProfile {
     var phone: String
     var address: String
 
-    // Initializer to allow setting localized defaults
     init(name: String, email: String, phone: String, address: String) {
         self.name = name
         self.email = email
@@ -97,7 +96,6 @@ class CartManager: ObservableObject {
     }
 }
 
-// MARK: - API Service
 class ProductService: ObservableObject {
     @Published var products: [Product] = []
     @Published var isLoading = false
@@ -152,7 +150,6 @@ class ProductService: ObservableObject {
     }
 }
 
-// MARK: - String Extension for Date Formatting
 extension String {
     func formattedDate(languageManager: LanguageManager) -> String {
         let formatter = ISO8601DateFormatter()

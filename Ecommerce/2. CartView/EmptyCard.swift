@@ -11,6 +11,8 @@ import SwiftUI
 
 struct EmptyCartView: View {
     @EnvironmentObject var languageManager: LanguageManager
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
         VStack(spacing: 20) {
             Image(systemName: "cart")

@@ -11,7 +11,9 @@ import SwiftUI
 struct ErrorView: View {
     let message: String
     let onRetry: () -> Void
-    @EnvironmentObject var languageManager: LanguageManager // Added for localization
+    @EnvironmentObject var languageManager: LanguageManager
+    @Environment(\.colorScheme) var colorScheme
+
     
     var body: some View {
         VStack(spacing: 20) {
@@ -19,7 +21,7 @@ struct ErrorView: View {
                 .font(.system(size: 50))
                 .foregroundColor(.red)
             
-            Text("error".localized(languageManager)) // Localized
+            Text("error".localized(languageManager))
                 .font(.title)
                 .bold()
                 .foregroundColor(.primary)
@@ -30,7 +32,7 @@ struct ErrorView: View {
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
             
-            Button("try_again".localized(languageManager)) { // Localized
+            Button("try_again".localized(languageManager)) { 
                 onRetry()
             }
             .padding(.horizontal, 24)

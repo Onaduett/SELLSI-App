@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct EcommerceApp: App {
-    @StateObject var languageManager = LanguageManager()
-    @StateObject var themeManager = ThemeManager()
-
+    @StateObject private var languageManager = LanguageManager()
+    @StateObject private var themeManager = ThemeManager()
+    
     var body: some Scene {
         WindowGroup {
             NavigationBar()

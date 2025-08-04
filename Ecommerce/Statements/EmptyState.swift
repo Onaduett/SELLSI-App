@@ -11,6 +11,8 @@ import SwiftUI
 struct EmptyStateView: View {
   let onRefresh: () -> Void
   @EnvironmentObject var languageManager: LanguageManager
+  @Environment(\.colorScheme) var colorScheme
+
   
   var body: some View {
       VStack(spacing: 20) {

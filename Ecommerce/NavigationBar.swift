@@ -2,14 +2,14 @@
 //  NavigationBar.swift
 //  Ecommerce
 //
-//  Created by v0 on 31.07.25.
+//  Created by Daulet on 31.07.25.
 //
 
 import SwiftUI
 
 struct NavigationBar: View {
     @EnvironmentObject var languageManager: LanguageManager
-    @StateObject private var themeManager = ThemeManager()
+    @EnvironmentObject var themeManager: ThemeManager // Changed to @EnvironmentObject
     @StateObject private var cartManager: CartManager
     @StateObject private var productService: ProductService
     
@@ -59,6 +59,7 @@ struct NavigationBar: View {
                 .environmentObject(themeManager)
         }
         .accentColor(.blue)
+        .preferredColorScheme(themeManager.isDarkMode ? .dark : .light) // Added this line
         .onAppear {
             cartManager.languageManager = languageManager
             productService.languageManager = languageManager
@@ -66,12 +67,12 @@ struct NavigationBar: View {
     }
 }
 
-
 struct ContentView_Previews: PreviewProvider {
-  static var previews: some View {
-      NavigationBar()
-          .environmentObject(LanguageManager())
-  }
+    static var previews: some View {
+        NavigationBar()
+            .environmentObject(LanguageManager())
+            .environmentObject(ThemeManager())
+    }
 }
 
 
